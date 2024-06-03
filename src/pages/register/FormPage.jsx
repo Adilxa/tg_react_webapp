@@ -11,8 +11,9 @@ function FormPage() {
 
     const [password, setPassword] = useState("")
 
-    const onSendRequest = async () => {
-        await $api.post("", {
+    const onSendRequest = async (e) => {
+        e.preventDefault();
+        await $api.post("registration", {
             INN: inn,
             password: password,
             chatId: user.id
@@ -27,7 +28,7 @@ function FormPage() {
 
             <div className="card">
                 <h2>Enter Inn & Password</h2>
-                <form>
+                <form onSubmit={(e) => onSendRequest(e)}>
                     <input onChange={(e) => setInn(e.target.value)} value={inn} type="text" placeholder="Inn" />
                     <input type="text" placeholder="password" onChange={(e) => setPassword(e.target.value)} value={password} />
                     <button type="submit">Submit</button>
