@@ -20,7 +20,7 @@ function FormPage() {
 
     return (
         <div className="container">
-            {chatId}
+            {user?.id}
 
             <div className="card">
                 <h2>Enter Inn & Password</h2>
