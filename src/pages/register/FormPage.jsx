@@ -3,7 +3,7 @@ import { useTelegramHook } from '../../hooks/useTelegramHook';
 import './FormPage.css';
 import axios from 'axios';
 import $api from '../../Api/http';
-import Popup from '../Popup/Popup';
+import Popup from '../../components/PopUp/index';
 
 function FormPage() {
     const { user, tg, onClose, chatId } = useTelegramHook();
