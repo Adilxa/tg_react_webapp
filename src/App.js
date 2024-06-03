@@ -29,10 +29,9 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         ></a>
+        <h1>{appData?.chat?.id}</h1>
         <div>{appData?.user?.first_name}</div>
-        <div>
-          <h1>{appData?.chat?.id}</h1>
-        </div>
+        <div></div>
       </header>
     </div>
   );
