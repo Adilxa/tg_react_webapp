@@ -1,27 +1,27 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useEffect } from "react";
-const tg = window.Telegram.WebApp;
+import { useTelegramHook } from "./hooks/useTelegramHook";
+import { Route, Routes } from "react-router-dom";
+import FormPage from "./pages/register/FormPage";
+import ComplainPage from "./pages/complain";
+import HelpPage from "./pages/help";
+import AboutPage from "./pages/about";
 
 function App() {
+  const { tg } = useTelegramHook();
+
   useEffect(() => {
     tg.ready();
   }, []);
 
-  const onClose = () => {
-    tg.close();
-  };
-
-  console.log(tg);
-
   return (
-    <form>
-      <h1>{tg.initData}</h1>
-      <input type="text" />
-      <div className="App">
-        <button onClick={onClose}>Close </button>
-      </div>
-    </form>
+    <Routes>
+      <Route index element={<FormPage />} />
+      <Route path="/complain" element={<ComplainPage />} />
+      <Route path="/help" element={<HelpPage />} />
+      <Route path="/about" element={<AboutPage />} />
+    </Routes>
   );
 }
 
