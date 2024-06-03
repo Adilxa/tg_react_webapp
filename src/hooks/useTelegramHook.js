@@ -1,8 +1,11 @@
 const tg = window.Telegram.WebApp;
 
 const getChatId = () => {
+  console.log("initData:", tg.initData);
   const params = new URLSearchParams(tg.initData);
-  return params.get("chat_id");
+  const chatId = params.get("chat_id");
+  console.log("chatId:", chatId);
+  return chatId;
 };
 
 export const useTelegramHook = () => {
