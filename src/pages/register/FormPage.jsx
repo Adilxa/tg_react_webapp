@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTelegramHook } from '../../hooks/useTelegramHook';
 import './FormPage.css';
 import axios from 'axios';
+import $api from '../../Api/http';
 
 function FormPage() {
     const { user, tg, onClose, chatId } = useTelegramHook();
@@ -11,8 +12,10 @@ function FormPage() {
     const [password, setPassword] = useState("")
 
     const onSendRequest = async () => {
-        await axios.post("", {
-
+        await $api.post("", {
+            INN: inn,
+            password: password,
+            chatId: user.id
         })
     }
 
