@@ -1,27 +1,48 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useEffect } from "react";
-import { useTelegramHook } from "./hooks/useTelegramHook";
-import { Route, Routes } from "react-router-dom";
-import FormPage from "./pages/register/FormPage";
-import ComplainPage from "./pages/complain";
-import HelpPage from "./pages/help";
-import AboutPage from "./pages/about";
+import { useEffect, useState } from "react";
 
 function App() {
-  const { tg } = useTelegramHook();
+  const [appData, setAppData] = useState(null);
+  const [chatId, setChatId] = useState(null);
 
   useEffect(() => {
-    tg.ready();
+    const fetchAppData = async () => {
+      if (window.Telegram && window.Telegram.WebApp) {
+        const app = window.Telegram.WebApp;
+        app.ready(); // Make sure the app is ready before accessing initDataUnsafe
+        setAppData(app.initDataUnsafe);
+
+        // Extract chat_id from initData
+        const params = new URLSearchParams(app.initData);
+        const chatId = params.get("chat_id");
+        setChatId(chatId);
+      }
+    };
+    fetchAppData();
   }, []);
 
   return (
-    <Routes>
-      <Route path="/" element={<FormPage />} />
-      <Route path="/complain" element={<ComplainPage />} />
-      <Route path="/help" element={<HelpPage />} />
-      <Route path="/about" element={<AboutPage />} />
-    </Routes>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+        <div>{appData?.user?.first_name}</div>
+        <div>
+          <h1>{chatId} da</h1>
+        </div>
+      </header>
+    </div>
   );
 }
 
