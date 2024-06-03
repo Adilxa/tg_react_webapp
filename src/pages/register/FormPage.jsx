@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import { useTelegramHook } from '../../hooks/useTelegramHook';
 import './FormPage.css';
+import axios from 'axios';
 
 function FormPage() {
-    const { user, tg, onClose } = useTelegramHook();
+    const { user, tg, onClose, chatId } = useTelegramHook();
 
     const [inn, setInn] = useState("");
 
     const [password, setPassword] = useState("")
 
+    const onSendRequest = async () => {
+        await axios.post("", {
+
+        })
+    }
+
     return (
         <div className="container">
-            {user?.username}
+            {chatId}
 
             <div className="card">
                 <h2>Enter Inn & Password</h2>
