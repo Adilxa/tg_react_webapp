@@ -17,7 +17,7 @@ function App() {
 
   return (
     <Routes>
-      <Route index element={<FormPage />} />
+      <Route path="/" element={<FormPage />} />
       <Route path="/complain" element={<ComplainPage />} />
       <Route path="/help" element={<HelpPage />} />
       <Route path="/about" element={<AboutPage />} />
