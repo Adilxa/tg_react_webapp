@@ -1,10 +1,10 @@
 const tg = window.Telegram.WebApp;
 
 const getChatId = () => {
-  console.log("initData:", tg.initData);
+  console.log("initData:", tg.initData); // Log the initData to inspect its content
   const params = new URLSearchParams(tg.initData);
   const chatId = params.get("chat_id");
-  console.log("chatId:", chatId);
+  console.log("chatId:", chatId); // Log the extracted chatId to verify
   return chatId;
 };
 
@@ -32,6 +32,11 @@ export const useTelegramHook = () => {
   };
 
   const chatId = getChatId();
+
+  console.log(
+    "Telegram WebApp initialized with the following data:",
+    tg.initDataUnsafe
+  );
 
   return {
     user: tg.initDataUnsafe?.user,

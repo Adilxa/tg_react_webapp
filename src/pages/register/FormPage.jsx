@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTelegramHook } from '../hooks/useTelegramHook';
+import { useTelegramHook } from '../../hooks/useTelegramHook';
 import './FormPage.css';
 
 function FormPage() {

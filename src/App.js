@@ -1,39 +1,27 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useTelegramHook } from "./hooks/useTelegramHook";
+import { Route, Routes } from "react-router-dom";
+import FormPage from "./pages/register/FormPage";
+import ComplainPage from "./pages/complain";
+import HelpPage from "./pages/help";
+import AboutPage from "./pages/about";
 
 function App() {
-  const app = window.Telegram?.WebApp;
-  const [appData, setAppData] = useState(null);
+  const { tg } = useTelegramHook();
 
   useEffect(() => {
-    const fetchAppData = async () => {
-      if (window.Telegram && window.Telegram.WebApp) {
-        const app = window.Telegram.WebApp;
-        await app.ready(); // Убедитесь, что app готов перед обращением к initDataUnsafe
-        setAppData(app.initDataUnsafe);
-      }
-    };
-    fetchAppData();
+    tg.ready();
   }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        ></a>
-        <h1>{appData?.chat?.id}</h1>
-        <div>{appData?.user?.first_name}</div>
-        <div></div>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<FormPage />} />
+      <Route path="/complain" element={<ComplainPage />} />
+      <Route path="/help" element={<HelpPage />} />
+      <Route path="/about" element={<AboutPage />} />
+    </Routes>
   );
 }
 
