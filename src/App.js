@@ -12,10 +12,16 @@ function App() {
     tg.close();
   };
 
+  console.log(tg);
+
   return (
-    <div className="App">
-      <button onClick={onClose}>Close </button>
-    </div>
+    <form>
+      <h1>{tg.initData}</h1>
+      <input type="text" />
+      <div className="App">
+        <button onClick={onClose}>Close </button>
+      </div>
+    </form>
   );
 }
 
