@@ -2,8 +2,7 @@ const tg = window.Telegram.WebApp;
 
 const getChatId = () => {
   const params = new URLSearchParams(tg.initData);
-  const chatId = params.get("chat_id");
-  return chatId;
+  return params.get("chat_id");
 };
 
 export const useTelegramHook = () => {
@@ -29,6 +28,8 @@ export const useTelegramHook = () => {
     tg.MainButton.show();
   };
 
+  const chatId = getChatId();
+
   return {
     user: tg.initDataUnsafe?.user,
     userId: tg.initDataUnsafe?.user?.id,
@@ -36,7 +37,7 @@ export const useTelegramHook = () => {
     firstName: tg.initDataUnsafe?.user?.first_name,
     lastName: tg.initDataUnsafe?.user?.last_name,
     languageCode: tg.initDataUnsafe?.user?.language_code,
-    chatId: getChatId(),
+    chatId,
     onClose,
     onToggleMainButton,
     setHeaderColor,

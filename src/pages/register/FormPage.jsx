@@ -1,30 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTelegramHook } from '../../hooks/useTelegramHook';
 import './FormPage.css';
-import axios from 'axios';
 
 function FormPage() {
-    const { user, tg, onClose, chatId } = useTelegramHook();
-
-    const [inn, setInn] = useState("");
-
-    const [password, setPassword] = useState("")
-
-    const onSendRequest = async () => {
-        await axios.post("", {
-
-        })
-    }
+    const { user, username, userId, firstName, lastName, languageCode, chatId, onClose, onToggleMainButton, setHeaderColor, setMainButton } = useTelegramHook();
 
     return (
         <div className="container">
-            {chatId}
-
             <div className="card">
-                <h2>Enter Inn & Password</h2>
+                <h2>Telegram User Info</h2>
+                <p>Username: {username}</p>
+                <p>User ID: {userId}</p>
+                <p>First Name: {firstName}</p>
+                <p>Last Name: {lastName}</p>
+                <p>Language Code: {languageCode}</p>
+                <p>Chat ID: {chatId}</p>
+                <button onClick={onClose}>Close</button>
+                <button onClick={onToggleMainButton}>Toggle Main Button</button>
+                <button onClick={() => setHeaderColor('#0000FF')}>Set Header Color</button>
+                <button onClick={() => setMainButton('Click Me', true)}>Set Main Button</button>
+            </div>
+            <div className="card">
+                <h2>Enter Username</h2>
                 <form>
-                    <input onChange={(e) => setInn(e.target.value)} value={inn} type="text" placeholder="Inn" />
-                    <input type="text" placeholder="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+                    <input type="text" placeholder="Username" />
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            <div className="card">
+                <h2>Enter Email</h2>
+                <form>
+                    <input type="email" placeholder="Email" />
                     <button type="submit">Submit</button>
                 </form>
             </div>
