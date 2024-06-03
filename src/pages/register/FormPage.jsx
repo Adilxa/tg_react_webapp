@@ -14,12 +14,16 @@ function FormPage() {
     const onSendRequest = async (e) => {
         e.preventDefault();
         try {
-            await $api.post("registration", {
+            const res = await $api.post("registration", {
                 INN: inn,
                 password: password,
                 chatId: user.id
             });
             // Handle successful request
+
+            if (res.status === 200) {
+                onClose()
+            }
         } catch (error) {
             if (error.response) {
                 if (error.response.status === 401) {
