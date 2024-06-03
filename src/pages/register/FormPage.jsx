@@ -47,7 +47,9 @@ function FormPage() {
 
     const ifChatExist = async () => {
         try {
-            const res = await $api.get("registration" + user.id)
+            const res = await $api.get("registration", {
+                chatId: user.id
+            })
             if (res.status === 200) {
                 setChatExist(true)
             }
