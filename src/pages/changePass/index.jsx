@@ -65,11 +65,15 @@ function ChangePass({ lang, inn }) {
                 INN: inn
             })
 
+            console.log(res , "----------")
+
             if (res.status === 200) {
-                tg.MainButton.setParams({
-                    text: translations[lang].backToTelegram,
-                    onClick: () => onClose()
-                });
+                await $api.post(`https://api.telegram.org/bot${process.env.TG_TOKEN}/sendMessage`, {
+                    chat_id: user.id,
+                    text: '✅'
+                  }).finally(() => {
+                    onClose()
+                  })                 
             } else {
                 setErrorMessage("404")
             }
