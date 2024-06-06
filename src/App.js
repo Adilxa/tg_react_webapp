@@ -7,6 +7,7 @@ import FormPage from "./pages/register/FormPage";
 import ComplainPage from "./pages/complain";
 import HelpPage from "./pages/help";
 import AboutPage from "./pages/about";
+import ChangePass from "./pages/changePass";
 
 function App() {
   const { tg } = useTelegramHook();
@@ -18,6 +19,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<FormPage />} />
+      <Route path="/changePass" element={<ChangePass />} />
       <Route path="/complain" element={<ComplainPage />} />
       <Route path="/help" element={<HelpPage />} />
       <Route path="/about" element={<AboutPage />} />
