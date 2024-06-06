@@ -5,15 +5,47 @@ import $api from '../../Api/http';
 import Popup from '../../components/PopUp';
 import { useNavigate } from 'react-router-dom';
 
-function FormPage() {
+function FormPage({ lang, inn, setInn }) {
 	const { user, tg, onClose, chatId } = useTelegramHook();
-	const [inn, setInn] = useState('');
 	const [password, setPassword] = useState('');
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [isChatExist, setChatExist] = useState(false);
-	const [lang, setLang] = useState(null); // Define lang state variable
 
 	const navigate = useNavigate();
+
+	// Language objects
+	const translations = {
+		en: {
+			enterINN: 'Enter INN',
+			enterPassword: 'Enter Password',
+			submit: 'Submit',
+			authorized: 'You are authorized!',
+			goBack: 'Go Back',
+			unauthorized: 'Unauthorized: Incorrect INN or password.',
+			notFound: 'Not Found: The requested resource was not found.',
+			errorOccurred: 'An error occurred. Please try again.'
+		},
+		ru: {
+			enterINN: 'Введите ИНН',
+			enterPassword: 'Введите пароль',
+			submit: 'Отправить',
+			authorized: 'Вы авторизованы!',
+			goBack: 'Назад',
+			unauthorized: 'Несанкционированный: Неверный ИНН или пароль.',
+			notFound: 'Не найдено: запрашиваемый ресурс не найден.',
+			errorOccurred: 'Произошла ошибка. Пожалуйста, попробуйте снова.'
+		},
+		ky: {
+			enterINN: 'ИННди киргизиңиз',
+			enterPassword: 'Сырсөздү киргизиңиз',
+			submit: 'Жөнөтүү',
+			authorized: 'Сизге рүқсат берилген!',
+			goBack: 'Артка',
+			unauthorized: 'Рүқсатсыз: Дүзгүн ИНН же сырсөз.',
+			notFound: 'Табылган жок: Суроо берилген ресурс табылган жок.',
+			errorOccurred: 'Ката кетти. Кийинки тазартыңыз.'
+		}
+	};
 
 	const onSendRequest = async (e) => {
 		e.preventDefault();
@@ -21,13 +53,15 @@ function FormPage() {
 		// Removed useState call from here
 
 		// Validation for minimum password length
+
+
 		try {
-			const res = { status: 200 };
-			// const res = await $api.post('registration', {
-			//     INN: inn,
-			//     password: password,
-			//     chatId: user.id,
-			// });
+			const res = await $api.post('registration', {
+				INN: inn,
+				password: password,
+				chatId: user.id,
+				lang
+			});
 
 			if (res.status === 200) {
 				navigate("/changePass");
@@ -35,14 +69,14 @@ function FormPage() {
 		} catch (error) {
 			if (error.response) {
 				if (error.response.status === 401) {
-					setErrorMessage('Unauthorized: Incorrect INN or password.');
+					setErrorMessage(translations[lang].unauthorized);
 				} else if (error.response.status === 404) {
-					setErrorMessage('Not Found: The requested resource was not found.');
+					setErrorMessage(translations[lang].notFound);
 				} else {
-					setErrorMessage('An error occurred. Please try again.');
+					setErrorMessage(translations[lang].errorOccurred);
 				}
 			} else {
-				setErrorMessage('An error occurred. Please try again.');
+				setErrorMessage(translations[lang].errorOccurred);
 			}
 		}
 	};
@@ -74,47 +108,37 @@ function FormPage() {
 
 	useEffect(() => {
 		ifChatExist();
-
-		const url = window.location.href;
-
-		// Create a new URL object
-		const urlObj = new URL(url);
-
-		// Use URLSearchParams to get the lang parameter
-		const langParam = urlObj.searchParams.get('lang');
-
-		// Set the state
-		setLang(langParam);
-
 	}, []);
 
 	return (
 		<div className='container'>
-			Language: {lang}
+			{/* Language: {lang} */}
 
 			{!isChatExist ? (
 				<div className='card'>
-					<h2>Enter INN & Password</h2>
+					<h2>{translations[lang].enterINN} & {translations[lang].enterPassword}</h2>
 					<form onSubmit={onSendRequest}>
 						<input
 							onChange={(e) => setInn(e.target.value)}
 							value={inn}
 							type='text'
-							placeholder='INN'
+							required
+							placeholder={translations[lang].enterINN}
 						/>
 						<input
 							type='password'
-							placeholder='Password'
+							required
+							placeholder={translations[lang].enterPassword}
 							onChange={(e) => setPassword(e.target.value)}
 							value={password}
 						/>
-						<button type='submit'>Submit</button>
+						<button type='submit'>{translations[lang].submit}</button>
 					</form>
 				</div>
 			) : (
 				<div className='card'>
-					<h1>You are authorized!</h1>
-					<button onClick={onClose}>Go Back</button>
+					<h1>{translations[lang].authorized}</h1>
+					<button onClick={onClose}>{translations[lang].goBack}</button>
 				</div>
 			)}
 			{errorMessage && <Popup message={errorMessage} onClose={closePopup} />}

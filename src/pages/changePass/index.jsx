@@ -2,44 +2,89 @@ import React, { useEffect, useState } from 'react';
 import "./ChangePass.css";
 import Popup from '../../components/PopUp';
 import { useTelegramHook } from '../../hooks/useTelegramHook';
+import $api from '../../Api/http';
 
-function ChangePass() {
+function ChangePass({ lang, inn }) {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
 
     const { user, tg, onClose } = useTelegramHook();
 
+    // Language objects
+    const translations = {
+        en: {
+            enterPassword: 'Enter Password',
+            confirmPassword: 'Confirm Password',
+            submit: 'Submit',
+            passwordsMatch: 'Passwords do not match.',
+            passwordLength: 'Password must be at least 6 characters long.',
+            unauthorized: 'Unauthorized: Incorrect INN or password.',
+            notFound: 'Not Found: The requested resource was not found.',
+            errorOccurred: 'An error occurred. Please try again.'
+        },
+        ru: {
+            enterPassword: 'Введите пароль',
+            confirmPassword: 'Подтвердите пароль',
+            submit: 'Отправить',
+            passwordsMatch: 'Пароли не совпадают.',
+            passwordLength: 'Пароль должен содержать не менее 6 символов.',
+            unauthorized: 'Несанкционированный: Неверный ИНН или пароль.',
+            notFound: 'Не найдено: запрашиваемый ресурс не найден.',
+            errorOccurred: 'Произошла ошибка. Пожалуйста, попробуйте снова.'
+        },
+        ky: {
+            enterPassword: 'Сырсөздү киргизиңиз',
+            confirmPassword: 'Сырсөздү бекитиңиз',
+            submit: 'Жөнөтүү',
+            passwordsMatch: 'Сырсөздөрдү теңдейт.',
+            passwordLength: 'Сырсөз узундугу 6 белгиден аз болбош керек.',
+            unauthorized: 'Рүқсатсыз: Дүзгүн ИНН же сырсөз.',
+            notFound: 'Табылган жок: Суроо берилген ресурс табылган жок.',
+            errorOccurred: 'Ката кетти. Кийинки тазартыңыз.'
+        }
+    };
+
     const onSendRequest = async (e) => {
         e.preventDefault();
 
         if (password !== repeatPassword) {
-            setErrorMessage('Passwords do not match.');
+            setErrorMessage(translations[lang].passwordsMatch);
             return;
         }
 
         if (password.length < 6) {
-            setErrorMessage('Password must be at least 6 characters long.');
+            setErrorMessage(translations[lang].passwordLength);
             return;
         }
 
         try {
-            const res = { status: 200 };
+            const res = await $api.put("registration", {
+                password: password,
+                repeatPassword: repeatPassword,
+                INN: inn
+            })
 
             if (res.status === 200) {
-
+                tg.MainButton.setParams({
+                    text: translations[lang].backToTelegram,
+                    onClick: () => onClose()
+                });
+            } else {
+                setErrorMessage("404")
             }
+
         } catch (error) {
             if (error.response) {
                 if (error.response.status === 401) {
-                    setErrorMessage('Unauthorized: Incorrect INN or password.');
+                    setErrorMessage(translations[lang].unauthorized);
                 } else if (error.response.status === 404) {
-                    setErrorMessage('Not Found: The requested resource was not found.');
+                    setErrorMessage(translations[lang].notFound);
                 } else {
-                    setErrorMessage('An error occurred. Please try again.');
+                    setErrorMessage(translations[lang].errorOccurred);
                 }
             } else {
-                setErrorMessage('An error occurred. Please try again.');
+                setErrorMessage(translations[lang].errorOccurred);
             }
         }
     };
@@ -48,33 +93,25 @@ function ChangePass() {
         setErrorMessage(null);
     };
 
-    useEffect(() => {
-        tg.MainButton.setParams({
-            text: "Back to Telegram",
-            onClick: () => onClose()
-        });
-    }, []);
-
-    console.log(tg);
 
     return (
         <div className='container'>
             <div className='card'>
-                <h2>Enter Password & Confirm Password</h2>
+                <h2>{translations[lang].enterPassword} & {translations[lang].confirmPassword}</h2>
                 <form onSubmit={onSendRequest}>
                     <input
                         type='password'
-                        placeholder='Password'
+                        placeholder={translations[lang].enterPassword}
                         onChange={(e) => setPassword(e.target.value)}
                         value={password}
                     />
                     <input
                         type='password'
-                        placeholder='Confirm Password'
+                        placeholder={translations[lang].confirmPassword}
                         onChange={(e) => setRepeatPassword(e.target.value)}
                         value={repeatPassword}
                     />
-                    <button type='submit'>Submit</button>
+                    <button type='submit'>{translations[lang].submit}</button>
                 </form>
             </div>
             {errorMessage && <Popup message={errorMessage} onClose={closePopup} />}
