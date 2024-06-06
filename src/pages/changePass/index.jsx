@@ -11,6 +11,8 @@ function ChangePass({ lang, inn }) {
 
     const { user, tg, onClose } = useTelegramHook();
 
+    const tgtoken = "7199195085:AAGX3FedvGavLPKAKee5fLJly0lKZOIO3W0"
+
     // Language objects
     const translations = {
         en: {
@@ -68,9 +70,9 @@ function ChangePass({ lang, inn }) {
             console.log(res , "----------")
 
             if (res.status === 200) {
-                await $api.post(`https://api.telegram.org/bot${process.env.TG_TOKEN}/sendMessage`, {
+                await $api.post(`https://api.telegram.org/bot${tgtoken}/sendMessage`, {
                     chat_id: user.id,
-                    text: '✅'
+                    text: '\u2705'
                   }).finally(() => {
                     onClose()
                   })                 
