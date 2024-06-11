@@ -5,6 +5,8 @@ import $api from '../../Api/http';
 import Popup from '../../components/PopUp';
 
 function Set_auth({ lang, inn, setInn }) {
+  const tgtoken = "7199195085:AAGX3FedvGavLPKAKee5fLJly0lKZOIO3W0"
+
   const { user, tg, onClose, chatId } = useTelegramHook();
   const [errorMessage, setErrorMessage] = useState(null);
   const [isReqDone, setReqDone] = useState(false);
@@ -45,19 +47,34 @@ function Set_auth({ lang, inn, setInn }) {
     }
   };
 
+  async function OnCloseClick(code, chatId) {
+    try{
+      await $api.post(`https://api.telegram.org/bot${tgtoken}/sendMessage`, {
+        chat_id: user.id,
+        text: `${code}, ${chatId}`
+      }).finally(() => {
+        onClose()
+      })                 
+    } 
+    catch(error){
+      onClose();
+    }
+}
+
   // Handle form submission
   const onSendRequest = async (e) => {
     e.preventDefault();
     try {
       const res = await $api.post('set_auth', {
         INN: inn,
-        chatId: chatId,
+        chatId: user.id,
       });
 
       if (res.status === 200) {
         setReqDone(true);
         setResponseCode(res.data.code);
         setResponseExpiry(new Date(res.data.expiryDate).toLocaleString());
+				
       } else if (res.status === 300) {
         setErrorMessage(translations[lang].authorized);
       }
@@ -101,7 +118,8 @@ function Set_auth({ lang, inn, setInn }) {
           <h1>{translations[lang].authorized}</h1>
           {responseCode && <p>Code: {responseCode}</p>}
           {responseExpiry && <p>Expires at: {responseExpiry}</p>}
-          <button onClick={onClose}>{translations[lang].goBack}</button>
+          <br />
+          <button onClick={()=>(OnCloseClick(responseCode, user.id))}>{translations[lang].goBack}</button>
         </div>
       )}
       {errorMessage && <Popup message={errorMessage} onClose={closePopup} />}
