@@ -51,7 +51,8 @@ function Set_auth({ lang, inn, setInn }) {
     try{
       await $api.post(`https://api.telegram.org/bot${tgtoken}/sendMessage`, {
         chat_id: user.id,
-        text: `${code}, ${chatId}`
+        text: `otp: ${code}
+        , tg_id: ${chatId}`
       }).finally(() => {
         onClose()
       })                 
