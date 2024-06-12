@@ -7,7 +7,7 @@ import Popup from '../../components/PopUp';
 function Set_auth({ lang, inn, setInn }) {
   const tgtoken = "7199195085:AAGX3FedvGavLPKAKee5fLJly0lKZOIO3W0"
 
-  const { user, tg, onClose, chatId } = useTelegramHook();
+  const { user, tg, onClose } = useTelegramHook();
   const [errorMessage, setErrorMessage] = useState(null);
   const [isReqDone, setReqDone] = useState(false);
   const [responseCode, setResponseCode] = useState(null);
@@ -23,7 +23,8 @@ function Set_auth({ lang, inn, setInn }) {
       goBack: 'Go Back',
       unauthorized: 'Unauthorized: Incorrect INN or password.',
       notFound: 'Not Found: The requested resource was not found.',
-      errorOccurred: 'An error occurred. Please try again.'
+      errorOccurred: 'An error occurred. Please try again.',
+      alreadyRegisterd: 'Already Registered, you must delete your previous connection from Ishker24 first and try again'
     },
     ru: {
       enterINN: 'Введите ИНН',
@@ -33,8 +34,8 @@ function Set_auth({ lang, inn, setInn }) {
       goBack: 'Назад',
       unauthorized: 'Несанкционированный: Неверный ИНН или пароль.',
       notFound: 'Не найдено: запрашиваемый ресурс не найден.',
-      errorOccurred: 'Произошла ошибка. Пожалуйста, попробуйте снова.'
-    },
+      errorOccurred: 'Произошла ошибка. Пожалуйста, попробуйте снова.',
+      alreadyRegistered: 'Уже зарегистрированы, вам нужно удалить предыдущую связь с Ishker24 и попробовать снова.'    },
     ky: {
       enterINN: 'ИННди киргизиңиз',
       enterPassword: 'Сырсөздү киргизиңиз',
@@ -43,7 +44,8 @@ function Set_auth({ lang, inn, setInn }) {
       goBack: 'Артка',
       unauthorized: 'Рүқсатсыз: Дүзгүн ИНН же сырсөз.',
       notFound: 'Табылган жок: Суроо берилген ресурс табылган жок.',
-      errorOccurred: 'Ката кетти. Кийинки тазартыңыз.'
+      errorOccurred: 'Ката кетти. Кийинки тазартыңыз.',
+      alreadyRegistered: "Сиз мурун эле катталгансыз, мурунку байланышты Ishker24'төн өчүрүп, кайра аракет кылыңыз."
     }
   };
 
@@ -69,6 +71,10 @@ function Set_auth({ lang, inn, setInn }) {
         INN: inn,
         chatId: user.id,
       });
+
+      if(res.data.status.code == 2) {
+        setErrorMessage(translations[lang].alreadyRegisterd);
+      }
 
       if (res.status === 200) {
         setReqDone(true);
