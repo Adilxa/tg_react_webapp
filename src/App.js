@@ -5,7 +5,7 @@ import { useTelegramHook } from "./hooks/useTelegramHook";
 import { Route, Routes } from "react-router-dom";
 import FormPage from "./pages/register/FormPage";
 import Set_auth from "./pages/set_auth/FormPage";
-import ChangePass from "./pages/changePass";
+import ChangeChatId from "./pages/ChangeChatId";
 
 function App() {
   const { tg } = useTelegramHook();
@@ -28,12 +28,8 @@ function App() {
   return (
     <Routes>
       <Route
-        path="/"
-        element={<FormPage lang={lang} inn={inn} setInn={setInn} />}
-      />
-      <Route
-        path="/changePass"
-        element={<ChangePass lang={lang} inn={inn} />}
+        path="/changeChatId"
+        element={<ChangeChatId lang={lang} inn={inn} />}
       />
       <Route
         path="/set_auth"
